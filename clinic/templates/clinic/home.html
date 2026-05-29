@@ -1,0 +1,30 @@
+{% extends 'clinic/base.html' %}
+{% block title %}Welcome — PetClinic{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold text-success">Welcome to PetClinic</h1>
+    <p class="lead text-muted">A veterinary clinic management system</p>
+    <div class="row mt-5 g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1">🏠</div>
+                    <h5 class="mt-2">Pet Owners</h5>
+                    <p class="text-muted">Find and manage pet owners and their pets</p>
+                    <a href="{% url 'owner_list' %}" class="btn btn-success">View Owners</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1">👨‍⚕️</div>
+                    <h5 class="mt-2">Veterinarians</h5>
+                    <p class="text-muted">View our veterinary team and their specialties</p>
+                    <a href="{% url 'vet_list' %}" class="btn btn-success">View Vets</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

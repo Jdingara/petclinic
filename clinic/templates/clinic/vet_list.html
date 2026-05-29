@@ -1,0 +1,27 @@
+{% extends 'clinic/base.html' %}
+{% block title %}Veterinarians — PetClinic{% endblock %}
+{% block content %}
+<h2 class="mb-4">Veterinarians</h2>
+<div class="row g-4">
+    {% for vet in vets %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Dr. {{ vet.first_name }} {{ vet.last_name }}</h5>
+                <div class="mt-2">
+                    {% for spec in vet.specialties.all %}
+                    <span class="badge bg-success me-1">{{ spec.name }}</span>
+                    {% empty %}
+                    <span class="text-muted">No specialties listed</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No veterinarians found. Add them via the <a href="/admin/">Admin panel</a>.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

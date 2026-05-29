@@ -1,0 +1,24 @@
+{% extends 'clinic/base.html' %}
+{% block title %}Add Visit — PetClinic{% endblock %}
+{% block content %}
+<h2>Add Visit</h2>
+<p class="text-muted">Pet: <strong>{{ pet.name }}</strong> &mdash; Owner: {{ pet.owner }}</p>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success">Save Visit</button>
+            <a href="{% url 'owner_detail' pet.owner.pk %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

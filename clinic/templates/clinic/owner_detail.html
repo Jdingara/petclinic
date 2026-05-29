@@ -1,0 +1,51 @@
+{% extends 'clinic/base.html' %}
+{% block title %}{{ owner }} — PetClinic{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>{{ owner.first_name }} {{ owner.last_name }}</h2>
+    <div>
+        <a href="{% url 'owner_edit' owner.pk %}" class="btn btn-outline-success">Edit Owner</a>
+        <a href="{% url 'owner_list' %}" class="btn btn-outline-secondary ms-2">Back</a>
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <p class="mb-1"><strong>Address:</strong> {{ owner.address }}, {{ owner.city }}</p>
+        <p class="mb-0"><strong>Telephone:</strong> {{ owner.telephone }}</p>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Pets</h4>
+    <a href="{% url 'pet_create' owner.pk %}" class="btn btn-sm btn-success">+ Add Pet</a>
+</div>
+
+{% for pet in owner.pets.all %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><strong>{{ pet.name }}</strong> &mdash; {{ pet.pet_type }} &mdash; Born: {{ pet.birth_date }}</span>
+        <a href="{% url 'visit_create' pet.pk %}" class="btn btn-sm btn-outline-success">+ Add Visit</a>
+    </div>
+    <div class="card-body">
+        {% if pet.visits.all %}
+        <table class="table table-sm mb-0">
+            <thead><tr><th>Date</th><th>Veterinarian</th><th>Description</th></tr></thead>
+            <tbody>
+                {% for visit in pet.visits.all %}
+                <tr>
+                    <td>{{ visit.visit_date }}</td>
+                    <td>{{ visit.vet }}</td>
+                    <td>{{ visit.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted mb-0">No visits recorded yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<div class="alert alert-info">No pets registered for this owner yet.</div>
+{% endfor %}
+{% endblock %}
