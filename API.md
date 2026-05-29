@@ -6,27 +6,36 @@
 http://127.0.0.1:8000
 ```
 
+## Authentication
+
+Owner, Pet, and Visit endpoints require staff login. Unauthenticated requests are redirected to `/admin/login/`.
+
+- 🔓 **Public** — accessible without login
+- 🔒 **Protected** — requires staff login
+
+---
+
 ## Endpoints
 
 ### Home
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/` | Home page |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| GET | `/` | 🔓 Public | Home page — auto-logs out any active session |
 
 ---
 
 ### Owners
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/owners/` | List all owners |
-| GET | `/owners/?q=<name>` | Search owners by first or last name |
-| GET | `/owners/new/` | Add new owner form |
-| POST | `/owners/new/` | Create new owner |
-| GET | `/owners/<id>/` | View owner detail + pets + visit history |
-| GET | `/owners/<id>/edit/` | Edit owner form |
-| POST | `/owners/<id>/edit/` | Update owner details |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| GET | `/owners/` | 🔒 Protected | List all owners |
+| GET | `/owners/?q=<name>` | 🔒 Protected | Search owners by first or last name |
+| GET | `/owners/new/` | 🔒 Protected | Add new owner form |
+| POST | `/owners/new/` | 🔒 Protected | Create new owner |
+| GET | `/owners/<id>/` | 🔒 Protected | View owner detail + pets + visit history |
+| GET | `/owners/<id>/edit/` | 🔒 Protected | Edit owner form |
+| POST | `/owners/<id>/edit/` | 🔒 Protected | Update owner details |
 
 **Owner fields:**
 
@@ -42,10 +51,10 @@ http://127.0.0.1:8000
 
 ### Pets
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/owners/<owner_id>/pets/new/` | Add pet form for owner |
-| POST | `/owners/<owner_id>/pets/new/` | Register new pet for owner |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| GET | `/owners/<owner_id>/pets/new/` | 🔒 Protected | Add pet form for owner |
+| POST | `/owners/<owner_id>/pets/new/` | 🔒 Protected | Register new pet for owner |
 
 **Pet fields:**
 
@@ -59,10 +68,10 @@ http://127.0.0.1:8000
 
 ### Visits
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/pets/<pet_id>/visits/new/` | Add visit form for pet |
-| POST | `/pets/<pet_id>/visits/new/` | Record new visit for pet |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| GET | `/pets/<pet_id>/visits/new/` | 🔒 Protected | Add visit form for pet |
+| POST | `/pets/<pet_id>/visits/new/` | 🔒 Protected | Record new visit for pet |
 
 **Visit fields:**
 
@@ -76,9 +85,9 @@ http://127.0.0.1:8000
 
 ### Veterinarians
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/vets/` | List all veterinarians with specialties |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| GET | `/vets/` | 🔓 Public | List all veterinarians with specialties |
 
 ---
 
