@@ -1,0 +1,9 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p>You have been successfully logged out.</p>
+<br>
+<p>
+  <a href="/" style="margin-right: 20px;">← Back to Home</a>
+  <a href="{% url 'admin:index' %}">Log in again</a>
+</p>
+{% endblock %}

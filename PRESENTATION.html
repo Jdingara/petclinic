@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetClinic — Boot Camp Presentation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0d1b2a; overflow: hidden; height: 100vh; }
+
+  .slide { display: none; width: 100vw; height: 100vh; padding: 60px 80px; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+
+  /* Slide themes */
+  .theme-dark    { background: linear-gradient(135deg, #0d1b2a 0%, #1a3c5e 100%); color: white; }
+  .theme-green   { background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); color: white; }
+  .theme-blue    { background: linear-gradient(135deg, #1a3c5e 0%, #2563a8 100%); color: white; }
+  .theme-light   { background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%); color: #1a3c5e; }
+  .theme-purple  { background: linear-gradient(135deg, #2d1b69 0%, #4a2c8a 100%); color: white; }
+  .theme-orange  { background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%); color: white; }
+  .theme-teal    { background: linear-gradient(135deg, #134e4a 0%, #0d9488 100%); color: white; }
+
+  /* Typography */
+  .tag { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 16px; font-size: 13px; font-weight: 600; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+  .tag.dark { background: rgba(37,99,168,0.15); color: #2563a8; }
+  h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 15px; }
+  h2 { font-size: 38px; font-weight: 700; margin-bottom: 20px; }
+  h3 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+  .subtitle { font-size: 20px; opacity: 0.8; margin-bottom: 10px; }
+  .body-text { font-size: 17px; line-height: 1.7; opacity: 0.9; }
+
+  /* Cards */
+  .card-grid { display: grid; gap: 18px; }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 22px 25px; border: 1px solid rgba(255,255,255,0.15); }
+  .card.light { background: white; border: 1px solid #dde8ff; color: #1a3c5e; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .card h3 { font-size: 16px; margin-bottom: 8px; }
+  .card p, .card li { font-size: 14px; line-height: 1.65; opacity: 0.9; }
+  .card ul { padding-left: 18px; }
+
+  /* Number highlight */
+  .big-number { font-size: 72px; font-weight: 900; line-height: 1; color: #60a5fa; }
+  .big-label { font-size: 15px; opacity: 0.7; margin-top: 5px; }
+
+  .stat-row { display: flex; gap: 40px; margin-top: 20px; }
+  .stat { text-align: center; }
+
+  /* Check list */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 10px 0; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: flex-start; gap: 12px; }
+  .checklist li:last-child { border-bottom: none; }
+  .check { color: #4ade80; font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .checklist.dark li { border-bottom: 1px solid #eee; color: #1a3c5e; }
+
+  /* Quote */
+  .quote { background: rgba(255,255,255,0.08); border-left: 4px solid #60a5fa; border-radius: 0 10px 10px 0; padding: 18px 25px; font-size: 16px; font-style: italic; line-height: 1.7; margin: 15px 0; }
+  .quote.dark { background: #e8f0fe; border-left: 4px solid #2563a8; color: #1a3c5e; }
+
+  /* Timeline */
+  .timeline { display: flex; gap: 0; }
+  .tl-step { flex: 1; text-align: center; position: relative; }
+  .tl-step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 18px; font-size: 20px; color: rgba(255,255,255,0.4); }
+  .tl-circle { width: 44px; height: 44px; border-radius: 50%; background: #60a5fa; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; font-size: 16px; color: #0d1b2a; }
+  .tl-label { font-size: 13px; opacity: 0.85; line-height: 1.4; }
+
+  /* Navigation */
+  .nav { position: fixed; bottom: 30px; right: 40px; display: flex; align-items: center; gap: 12px; z-index: 100; }
+  .nav button { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 18px; cursor: pointer; transition: all 0.2s; }
+  .nav button:hover { background: rgba(255,255,255,0.3); }
+  .slide-counter { color: rgba(255,255,255,0.6); font-size: 13px; min-width: 60px; text-align: center; }
+
+  .slide-number { position: fixed; top: 25px; right: 40px; color: rgba(255,255,255,0.35); font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+
+  /* Code block */
+  .code { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 14px 18px; font-family: monospace; font-size: 14px; color: #a5f3fc; margin: 8px 0; }
+
+  /* Divider */
+  .divider { width: 60px; height: 4px; background: #60a5fa; border-radius: 2px; margin: 15px 0 25px; }
+  .divider.green { background: #4ade80; }
+  .divider.orange { background: #fb923c; }
+
+  /* Two column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .two-col.wide { grid-template-columns: 1.4fr 1fr; }
+
+  .emoji-big { font-size: 80px; text-align: center; margin-bottom: 15px; }
+
+  /* Table */
+  table.slide-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.slide-table th { background: rgba(255,255,255,0.15); padding: 10px 14px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+  table.slide-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 14px; }
+
+  .badge { display: inline-block; background: #4ade80; color: #064e3b; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 700; margin-left: 8px; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide theme-dark active">
+  <div class="tag">AI-Assisted Software Engineering Boot Camp</div>
+  <h1>Building PetClinic<br>as a Business Analyst</h1>
+  <div class="divider"></div>
+  <p class="subtitle">From requirements to working software — using AI responsibly across the full SDLC</p>
+  <div class="stat-row" style="margin-top:40px;">
+    <div class="stat"><div class="big-number">6</div><div class="big-label">Requirements<br>Delivered</div></div>
+    <div class="stat"><div class="big-number">17</div><div class="big-label">Tests<br>Passing</div></div>
+    <div class="stat"><div class="big-number">1</div><div class="big-label">Day<br>Built In</div></div>
+    <div class="stat"><div class="big-number">7</div><div class="big-label">Deliverables<br>Submitted</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 2: WHO I AM -->
+<div class="slide theme-blue">
+  <div class="tag">About Me</div>
+  <div class="two-col">
+    <div>
+      <h2>My Role in This Challenge</h2>
+      <div class="divider"></div>
+      <ul class="checklist" style="margin-top:10px;">
+        <li><span class="check">▸</span><div><strong>Business Analyst</strong><br>I understand requirements, define scope, and translate business needs into a product</div></li>
+        <li><span class="check">▸</span><div><strong>Learning to Code</strong><br>This boot camp is my experiment — building real software end-to-end while understanding every decision</div></li>
+        <li><span class="check">▸</span><div><strong>AI as My Pair Programmer</strong><br>I used Claude AI to generate code — but every decision, approval, and validation was mine</div></li>
+      </ul>
+    </div>
+    <div style="text-align:center;">
+      <div class="emoji-big">🧑‍💼</div>
+      <div class="quote" style="text-align:left; font-size:15px;">"AI must assist engineering, not replace engineering judgment." <br><br>— The Challenge Document</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: THE CHALLENGE -->
+<div class="slide theme-light">
+  <div class="tag dark">The Challenge</div>
+  <h2>What Was Asked of Me</h2>
+  <div class="divider" style="background:#2563a8;"></div>
+  <div class="card-grid cols-3" style="margin-top: 10px;">
+    <div class="card light">
+      <h3>🏗️ Build</h3>
+      <p>A Veterinary Clinic Management System inspired by Spring PetClinic — using any technology stack</p>
+    </div>
+    <div class="card light">
+      <h3>📋 Deliver</h3>
+      <p>Source code, README, Architecture doc, API docs, test evidence, and AI usage notes</p>
+    </div>
+    <div class="card light">
+      <h3>🎯 Demonstrate</h3>
+      <p>Responsible AI use — engineering discipline, not just working software</p>
+    </div>
+    <div class="card light">
+      <h3>⏱️ Timeline</h3>
+      <p>Day 0: Challenge published<br>Day 1: Design & build<br>Day 2: Present & evaluate</p>
+    </div>
+    <div class="card light">
+      <h3>🚫 Constraint</h3>
+      <p>Do NOT use Spring PetClinic code directly. Interpret requirements and build fresh.</p>
+    </div>
+    <div class="card light">
+      <h3>⚖️ Evaluated On</h3>
+      <p>Functional correctness (30%), Code quality (15%), Tests (15%), Architecture (15%), Security (10%)</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: MY SDLC APPROACH -->
+<div class="slide theme-green">
+  <div class="tag">My Approach</div>
+  <h2>How I Followed the SDLC</h2>
+  <div class="divider green"></div>
+  <p class="body-text" style="margin-bottom:30px;">As a Business Analyst, I did not start coding immediately. I followed the Software Development Life Cycle — the same process professional teams use.</p>
+  <div class="timeline">
+    <div class="tl-step">
+      <div class="tl-circle">1</div>
+      <div class="tl-label"><strong>Requirements</strong><br>Read & interpreted all FR + NFR</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-circle">2</div>
+      <div class="tl-label"><strong>Architecture</strong><br>Chose stack with clear reasoning</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-circle">3</div>
+      <div class="tl-label"><strong>Design</strong><br>Database tables & page structure</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-circle">4</div>
+      <div class="tl-label"><strong>Development</strong><br>Models, views, templates, admin</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-circle">5</div>
+      <div class="tl-label"><strong>Testing</strong><br>17 automated tests — all passing</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-circle">6</div>
+      <div class="tl-label"><strong>Delivery</strong><br>GitHub + full documentation</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: REQUIREMENT INTERPRETATION -->
+<div class="slide theme-blue">
+  <div class="tag">SDLC Stage 1 — Requirements</div>
+  <h2>How I Read the Requirements</h2>
+  <div class="divider"></div>
+  <p class="body-text" style="margin-bottom:20px;">As a PM, my first job is to understand WHAT needs to be built before HOW. I mapped every requirement to a concrete deliverable.</p>
+  <div class="card-grid cols-2">
+    <div class="card"><h3>FR-001 Owner Management</h3><p>→ Owner model + list page + search + create + edit pages</p></div>
+    <div class="card"><h3>FR-002 Pet Management</h3><p>→ Pet model linked to Owner + add pet form + view history</p></div>
+    <div class="card"><h3>FR-003 Pet Types</h3><p>→ Separate PetType model (Dog, Cat, Bird, Hamster) — configurable without code changes</p></div>
+    <div class="card"><h3>FR-004 Veterinarian Management</h3><p>→ Vet model + Specialty model (many-to-many) + vets list page</p></div>
+    <div class="card"><h3>FR-005 Visit Management</h3><p>→ Visit model + schedule visit form + visit history on owner detail page</p></div>
+    <div class="card"><h3>FR-006 Search & Navigation</h3><p>→ Search bar on owners page + navigation bar on every page + pet lookup via owner</p></div>
+  </div>
+</div>
+
+<!-- SLIDE 6: ARCHITECTURE DECISION -->
+<div class="slide theme-purple">
+  <div class="tag">SDLC Stage 2 — Architecture</div>
+  <div class="two-col wide">
+    <div>
+      <h2>Why Python + Django?</h2>
+      <div class="divider" style="background:#c084fc;"></div>
+      <p class="body-text" style="margin-bottom:20px;">The challenge allowed any technology stack. This was my deliberate architectural decision — not an AI decision.</p>
+      <ul class="checklist" style="margin-top:5px;">
+        <li><span class="check">✓</span><div><strong>Django is "batteries included"</strong> — admin panel, database ORM, user auth, forms all built-in. Less code to write, fewer bugs.</div></li>
+        <li><span class="check">✓</span><div><strong>Python is readable</strong> — AI-generated code is easy to understand and validate. I can explain every line.</div></li>
+        <li><span class="check">✓</span><div><strong>SQLite requires zero setup</strong> — database is one file. Anyone can clone and run immediately.</div></li>
+        <li><span class="check">✓</span><div><strong>One-day timeline</strong> — Django delivers working features faster than Java + Spring Boot for this scope.</div></li>
+      </ul>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:15px;">
+        <h3 style="color:#c084fc;">Java + Spring Boot</h3>
+        <p>Original Spring PetClinic stack. More verbose, longer setup, less suitable for a one-day solo build.</p>
+      </div>
+      <div class="card" style="border-color:#4ade80;">
+        <h3 style="color:#4ade80;">Python + Django ✓ Chosen</h3>
+        <p>Readable, fast, full-featured. Right tool for this project scope and timeline.</p>
+      </div>
+      <div class="quote" style="margin-top:15px; font-size:14px;">"Choosing the right tool for the context IS architectural thinking."</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: DATABASE DESIGN -->
+<div class="slide theme-teal">
+  <div class="tag">SDLC Stage 3 — Design</div>
+  <h2>Database Design — 6 Tables</h2>
+  <div class="divider" style="background:#2dd4bf;"></div>
+  <div class="card-grid cols-3" style="margin-top:5px;">
+    <div class="card"><h3>Owner</h3><p>first_name, last_name,<br>address, city, telephone</p></div>
+    <div class="card"><h3>PetType</h3><p>name<br>(Dog / Cat / Bird / Hamster)</p></div>
+    <div class="card"><h3>Pet</h3><p>name, birth_date<br>→ PetType (FK)<br>→ Owner (FK)</p></div>
+    <div class="card"><h3>Specialty</h3><p>name<br>(Radiology / Surgery / Dentistry)</p></div>
+    <div class="card"><h3>Vet</h3><p>first_name, last_name<br>→ Specialties (Many-to-Many)</p></div>
+    <div class="card"><h3>Visit</h3><p>visit_date, description<br>→ Pet (FK)<br>→ Vet (FK)</p></div>
+  </div>
+  <div class="quote" style="margin-top:20px; font-size:14px;">As a PM I now understand: every feature request must be traced back to a database table. "Add blood type?" → one new field. "Track which nurse called?" → one new field with a FK. This thinking makes me a better PM in developer conversations.</div>
+</div>
+
+<!-- SLIDE 8: WHAT I BUILT -->
+<div class="slide theme-light">
+  <div class="tag dark">SDLC Stage 4 — Development</div>
+  <h2>What I Built — 8 Pages</h2>
+  <div class="divider" style="background:#2563a8;"></div>
+  <table class="slide-table" style="color:#1a3c5e;">
+    <thead><tr><th>Page</th><th>URL</th><th>What It Does</th><th>Requirement</th></tr></thead>
+    <tbody>
+      <tr><td>🏠 Home</td><td>/</td><td>Welcome page with navigation to Owners and Vets</td><td>FR-006</td></tr>
+      <tr><td>👥 Owner List</td><td>/owners/</td><td>List all owners with search by name</td><td>FR-001, FR-006</td></tr>
+      <tr><td>➕ Add Owner</td><td>/owners/new/</td><td>Form to create a new pet owner</td><td>FR-001</td></tr>
+      <tr><td>📋 Owner Detail</td><td>/owners/&lt;id&gt;/</td><td>Owner info + all pets + full visit history</td><td>FR-001, FR-002, FR-005</td></tr>
+      <tr><td>✏️ Edit Owner</td><td>/owners/&lt;id&gt;/edit/</td><td>Update owner details</td><td>FR-001</td></tr>
+      <tr><td>🐾 Add Pet</td><td>/owners/&lt;id&gt;/pets/new/</td><td>Register a pet for an owner</td><td>FR-002, FR-003</td></tr>
+      <tr><td>🏥 Add Visit</td><td>/pets/&lt;id&gt;/visits/new/</td><td>Schedule a visit, assign vet, add notes</td><td>FR-005</td></tr>
+      <tr><td>👨‍⚕️ Vet List</td><td>/vets/</td><td>All vets with their specialties displayed</td><td>FR-004</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SLIDE 9: ENGINEERING DISCIPLINE -->
+<div class="slide theme-dark">
+  <div class="tag">Engineering Discipline</div>
+  <h2>Clean Code Structure</h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <p class="body-text" style="margin-bottom:20px;">Each file has exactly one job. This is the Django MTV pattern — separation of concerns.</p>
+      <ul class="checklist">
+        <li><span class="check">▸</span><div><strong>models.py</strong> — database table definitions only</div></li>
+        <li><span class="check">▸</span><div><strong>views.py</strong> — page logic only, no HTML</div></li>
+        <li><span class="check">▸</span><div><strong>forms.py</strong> — input validation only</div></li>
+        <li><span class="check">▸</span><div><strong>admin.py</strong> — admin panel config only</div></li>
+        <li><span class="check">▸</span><div><strong>urls.py</strong> — URL routing only</div></li>
+        <li><span class="check">▸</span><div><strong>templates/</strong> — HTML only, extends base.html</div></li>
+        <li><span class="check">▸</span><div><strong>requirements.txt</strong> — dependencies documented</div></li>
+      </ul>
+    </div>
+    <div>
+      <div class="code">
+clinic/<br>
+├── models.py    ← 6 tables<br>
+├── views.py     ← 8 views<br>
+├── forms.py     ← 3 forms<br>
+├── admin.py     ← admin config<br>
+├── urls.py      ← 8 routes<br>
+├── tests.py     ← 17 tests<br>
+└── templates/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── clinic/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── base.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── home.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── owner_*.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── pet_form.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── visit_form.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── vet_list.html
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: TESTING & VALIDATION -->
+<div class="slide theme-green">
+  <div class="tag">SDLC Stage 5 — Validation</div>
+  <h2>17 Tests — All Passing</h2>
+  <div class="divider green"></div>
+  <div class="two-col">
+    <div>
+      <p class="body-text" style="margin-bottom:20px;">Testing is how you prove the software works — not by looking at it, but by running automated checks.</p>
+      <ul class="checklist">
+        <li><span class="check">✓</span><div>OwnerModelTest — 2 tests</div></li>
+        <li><span class="check">✓</span><div>PetTypeModelTest — 1 test</div></li>
+        <li><span class="check">✓</span><div>PetModelTest — 2 tests</div></li>
+        <li><span class="check">✓</span><div>VetModelTest — 2 tests</div></li>
+        <li><span class="check">✓</span><div>VisitModelTest — 1 test</div></li>
+        <li><span class="check">✓</span><div>OwnerViewTest — 8 tests (list, search, detail, create, edit)</div></li>
+        <li><span class="check">✓</span><div>VetViewTest — 1 test</div></li>
+      </ul>
+    </div>
+    <div style="text-align:center;">
+      <div class="big-number" style="font-size:100px;">17</div>
+      <div class="big-label" style="font-size:18px;">Tests Passing</div>
+      <div class="code" style="margin-top:25px; text-align:left;">
+python manage.py test clinic<br><br>
+Ran 17 tests in 0.090s<br><br>
+<span style="color:#4ade80;">OK</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: AI USAGE -->
+<div class="slide theme-orange">
+  <div class="tag">AI Usage — Responsible & Transparent</div>
+  <h2>How I Used Claude AI</h2>
+  <div class="divider orange"></div>
+  <div class="card-grid cols-2">
+    <div class="card">
+      <h3>✅ What AI Did</h3>
+      <ul style="padding-left:18px; font-size:14px; line-height:1.8;">
+        <li>Generated all 6 database models</li>
+        <li>Wrote all 8 view functions</li>
+        <li>Created all 7 HTML templates</li>
+        <li>Wrote 17 automated tests</li>
+        <li>Generated README, Architecture, API docs</li>
+        <li>Resolved errors and conflicts instantly</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🧑‍💼 What I Did (Human Judgment)</h3>
+      <ul style="padding-left:18px; font-size:14px; line-height:1.8;">
+        <li>Chose Python + Django over Java/Spring Boot</li>
+        <li>Approved every file before it was saved</li>
+        <li>Interpreted the challenge requirements</li>
+        <li>Verified the app works in the browser</li>
+        <li>Added real sample data manually</li>
+        <li>Made all scope and priority decisions</li>
+      </ul>
+    </div>
+  </div>
+  <div class="quote" style="margin-top:20px; font-size:15px;">"AI accelerated development by 5x — but accountability, validation, and understanding remained 100% human."</div>
+</div>
+
+<!-- SLIDE 12: DELIVERABLES -->
+<div class="slide theme-blue">
+  <div class="tag">SDLC Stage 6 — Delivery</div>
+  <h2>All 7 Deliverables Submitted</h2>
+  <div class="divider"></div>
+  <ul class="checklist" style="margin-top:10px;">
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>Source Code Repository</strong> — github.com/Jdingara/petclinic — complete, runnable solution</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>README.md</strong> — setup steps, run instructions, testing instructions, technology choices</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>ARCHITECTURE.md</strong> — high-level design, component responsibilities, design decisions, tradeoffs</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>API.md</strong> — all 8 endpoints documented with methods, URLs, fields</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>Test Evidence</strong> — 17 tests, all passing, shown live</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>AI_USAGE.md</strong> — how AI was used, where I intervened, lessons learned</div></li>
+    <li><span class="check" style="font-size:22px;">✅</span><div><strong>Working Application</strong> — runs locally on localhost:8000 with real data</div></li>
+  </ul>
+</div>
+
+<!-- SLIDE 13: LESSONS LEARNED -->
+<div class="slide theme-light">
+  <div class="tag dark">Lessons Learned</div>
+  <h2>What I Learned as a PM Who Coded</h2>
+  <div class="divider" style="background:#2563a8;"></div>
+  <div class="card-grid cols-2" style="margin-top:10px;">
+    <div class="card light">
+      <h3>📐 Requirements drive everything</h3>
+      <p>Every page, every database field, every button exists because of a requirement. If I had skipped reading FR-001 to FR-006 carefully, I would have built the wrong thing — fast.</p>
+    </div>
+    <div class="card light">
+      <h3>🗄️ Database design is the foundation</h3>
+      <p>Before writing code, I designed 6 tables and their relationships. When the database is right, the code almost writes itself. When it's wrong, nothing works.</p>
+    </div>
+    <div class="card light">
+      <h3>🤖 AI is a force multiplier — not a replacement</h3>
+      <p>AI wrote code in seconds. But without my requirement interpretation and architectural decisions, that code would have solved the wrong problem.</p>
+    </div>
+    <div class="card light">
+      <h3>🧪 Tests are proof, not optional</h3>
+      <p>17 automated tests give me confidence to say the app works — not just "I think it works." This is measurable delivery quality.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: DEMO -->
+<div class="slide theme-dark">
+  <div class="tag">Live Demo</div>
+  <div style="text-align:center; padding: 20px 0;">
+    <div class="emoji-big">🖥️</div>
+    <h2>Live Demonstration</h2>
+    <div class="divider" style="margin: 15px auto; width:60px;"></div>
+    <div class="card-grid cols-3" style="max-width:700px; margin: 25px auto 0;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">🏠</div>
+        <p><strong>Step 1</strong><br>Home page</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">🔍</div>
+        <p><strong>Step 2</strong><br>Search an owner</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">🐾</div>
+        <p><strong>Step 3</strong><br>View pets & visits</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">👨‍⚕️</div>
+        <p><strong>Step 4</strong><br>View vets</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">⚙️</div>
+        <p><strong>Step 5</strong><br>Admin panel</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:30px; margin-bottom:8px;">✅</div>
+        <p><strong>Step 6</strong><br>Run 17 tests</p>
+      </div>
+    </div>
+    <div style="margin-top:25px; opacity:0.6; font-size:14px;">Open browser → http://127.0.0.1:8000</div>
+  </div>
+</div>
+
+<!-- SLIDE 15: CLOSING -->
+<div class="slide theme-green">
+  <div style="text-align:center;">
+    <div class="emoji-big">🐾</div>
+    <h1>Thank You</h1>
+    <div class="divider green" style="margin: 20px auto; width:80px;"></div>
+    <p class="subtitle" style="margin-bottom:30px;">PetClinic — Built in one day, following every SDLC stage</p>
+    <div class="card-grid cols-3" style="max-width:600px; margin: 0 auto;">
+      <div class="card" style="text-align:center;"><strong>6</strong><br><small>Requirements</small></div>
+      <div class="card" style="text-align:center;"><strong>17</strong><br><small>Tests Passing</small></div>
+      <div class="card" style="text-align:center;"><strong>7</strong><br><small>Deliverables</small></div>
+    </div>
+    <div style="margin-top:35px; opacity:0.7; font-size:14px;">github.com/Jdingara/petclinic</div>
+    <div class="quote" style="max-width:500px; margin: 20px auto 0; font-size:15px;">"One person + AI + engineering discipline = a complete, working, tested, documented system in one day."</div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="changeSlide(-1)">&#8592;</button>
+  <span class="slide-counter" id="counter">1 / 15</span>
+  <button onclick="changeSlide(1)">&#8594;</button>
+</div>
+<div class="slide-number" id="slideNum">01</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('slideNum').textContent = String(current + 1).padStart(2, '0');
+  }
+
+  function changeSlide(dir) { showSlide(current + dir); }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+</script>
+</body>
+</html>

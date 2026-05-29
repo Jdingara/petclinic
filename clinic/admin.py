@@ -1,6 +1,11 @@
 from django.contrib import admin
 from .models import Owner, Pet, PetType, Specialty, Vet, Visit
 
+admin.site.site_header = "Sasi's Pet Clinic"
+admin.site.site_title = "Sasi's Pet Clinic"
+admin.site.index_title = "Site Administration"
+admin.site.site_url = ""
+
 
 class PetInline(admin.TabularInline):
     model = Pet

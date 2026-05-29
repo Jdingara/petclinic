@@ -1,13 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Owner, Pet, Vet
 from .forms import OwnerForm, PetForm, VisitForm
 
 
 def home(request):
+    if request.user.is_authenticated:
+        auth_logout(request)
     return render(request, 'clinic/home.html')
 
 
+@login_required
 def owner_list(request):
     query = request.GET.get('q', '')
     owners = Owner.objects.all()
@@ -18,11 +23,13 @@ def owner_list(request):
     return render(request, 'clinic/owner_list.html', {'owners': owners, 'query': query})
 
 
+@login_required
 def owner_detail(request, pk):
     owner = get_object_or_404(Owner, pk=pk)
     return render(request, 'clinic/owner_detail.html', {'owner': owner})
 
 
+@login_required
 def owner_create(request):
     if request.method == 'POST':
         form = OwnerForm(request.POST)
@@ -34,6 +41,7 @@ def owner_create(request):
     return render(request, 'clinic/owner_form.html', {'form': form, 'title': 'Add Owner'})
 
 
+@login_required
 def owner_edit(request, pk):
     owner = get_object_or_404(Owner, pk=pk)
     if request.method == 'POST':
@@ -46,6 +54,7 @@ def owner_edit(request, pk):
     return render(request, 'clinic/owner_form.html', {'form': form, 'title': 'Edit Owner'})
 
 
+@login_required
 def pet_create(request, owner_pk):
     owner = get_object_or_404(Owner, pk=owner_pk)
     if request.method == 'POST':
@@ -60,6 +69,7 @@ def pet_create(request, owner_pk):
     return render(request, 'clinic/pet_form.html', {'form': form, 'owner': owner})
 
 
+@login_required
 def visit_create(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
     if request.method == 'POST':
