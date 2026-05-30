@@ -1,0 +1,19 @@
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    venv
+  | migrations
+)/
+'''
+
+[tool.coverage.run]
+source = ["clinic"]
+omit = ["*/migrations/*", "*/venv/*"]
+
+[tool.coverage.report]
+fail_under = 60
+
+[project]
+name = "petclinic"
+version = "1.0.0"

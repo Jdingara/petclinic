@@ -1,6 +1,7 @@
 import datetime
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.contrib.auth.models import User
 from .models import Owner, PetType, Pet, Specialty, Vet, Visit
 
 
@@ -83,6 +84,8 @@ class VisitModelTest(TestCase):
 class OwnerViewTest(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_login(self.user)
         self.owner = Owner.objects.create(
             first_name='Bob', last_name='Jones',
             address='10 Elm St', city='Ogdenville', telephone='5550001111'
