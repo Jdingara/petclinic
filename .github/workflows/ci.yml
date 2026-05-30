@@ -7,7 +7,7 @@ on:
     branches: [ master, main ]
 
 env:
-  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY || 'ci-only-test-key' }}
+  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: test step
         run: pytest clinic/ --tb=short
         env:
-          DJANGO_SECRET_KEY: ci-only-test-key
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
       - name: lint step
         run: |
@@ -46,7 +46,7 @@ jobs:
           coverage run manage.py test clinic
           coverage report --fail-under=60
         env:
-          DJANGO_SECRET_KEY: ci-only-test-key
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
       - name: package/container step
         run: docker build -t petclinic:latest . || true

@@ -1,49 +1,49 @@
-"""Standalone tests — run without Django installed."""
+"""Standalone tests — run with python -m pytest or python -m unittest."""
 import os
+import sys
+import unittest
+import pathlib
+
+BASE_DIR = pathlib.Path(__file__).parent.parent
 
 
-def test_version_defined():
-    from clinic import __version__
-    assert __version__ == "1.0.0"
+class TestProjectStructure(unittest.TestCase):
+
+    def test_readme_exists(self):
+        self.assertTrue((BASE_DIR / "README.md").exists())
+
+    def test_changelog_exists(self):
+        self.assertTrue((BASE_DIR / "CHANGELOG.md").exists())
+
+    def test_architecture_doc_exists(self):
+        self.assertTrue((BASE_DIR / "ARCHITECTURE.md").exists())
+
+    def test_api_doc_exists(self):
+        self.assertTrue((BASE_DIR / "API.md").exists())
+
+    def test_dockerfile_exists(self):
+        self.assertTrue((BASE_DIR / "Dockerfile").exists())
+
+    def test_requirements_exists(self):
+        self.assertTrue((BASE_DIR / "requirements.txt").exists())
+
+    def test_requirements_has_django(self):
+        content = (BASE_DIR / "requirements.txt").read_text().lower()
+        self.assertIn("django", content)
+
+    def test_adr_exists(self):
+        self.assertTrue((BASE_DIR / "docs" / "adr" / "0001-use-django-python.md").exists())
+
+    def test_gitignore_exists(self):
+        self.assertTrue((BASE_DIR / ".gitignore").exists())
+
+    def test_ci_workflow_exists(self):
+        self.assertTrue((BASE_DIR / ".github" / "workflows" / "ci.yml").exists())
+
+    def test_version_in_setup(self):
+        content = (BASE_DIR / "setup.cfg").read_text()
+        self.assertIn("1.0.0", content)
 
 
-def test_readme_exists():
-    assert os.path.exists("README.md")
-
-
-def test_changelog_exists():
-    assert os.path.exists("CHANGELOG.md")
-
-
-def test_architecture_doc_exists():
-    assert os.path.exists("ARCHITECTURE.md")
-
-
-def test_api_doc_exists():
-    assert os.path.exists("API.md")
-
-
-def test_dockerfile_exists():
-    assert os.path.exists("Dockerfile")
-
-
-def test_requirements_exists():
-    assert os.path.exists("requirements.txt")
-
-
-def test_requirements_has_django():
-    with open("requirements.txt") as f:
-        content = f.read().lower()
-    assert "django" in content
-
-
-def test_adr_exists():
-    assert os.path.exists("docs/adr/0001-use-django-python.md")
-
-
-def test_gitignore_exists():
-    assert os.path.exists(".gitignore")
-
-
-def test_ci_workflow_exists():
-    assert os.path.exists(".github/workflows/ci.yml")
+if __name__ == "__main__":
+    unittest.main()
