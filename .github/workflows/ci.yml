@@ -44,7 +44,7 @@ jobs:
           safety check || true
           detect-secrets scan --baseline .secrets.baseline || true
           coverage run manage.py test clinic
-          coverage report --fail-under=60 || true
+          coverage report --fail-under=60
         env:
           DJANGO_SECRET_KEY: ci-only-test-key
 
